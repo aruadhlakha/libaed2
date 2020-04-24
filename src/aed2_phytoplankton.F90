@@ -720,7 +720,7 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
       rng=r4_normal_ab(mu,sigma,seed_growth)  
       !------------------------------------------------------------------------+
       ! Primary production rate
-      primprod(phy_i) = rng * fT * findMin(fI,fNit,fPho,fSil) * fxl
+      primprod(phy_i) = (rng/secs_per_day) * fT * findMin(fI,fNit,fPho,fSil) * fxl
 
       ! Adjust primary production rate for nitrogen fixers
       IF (data%phytos(phy_i)%simNFixation /= 0) THEN

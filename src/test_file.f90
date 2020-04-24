@@ -68,5 +68,7 @@ function random_num ( seed )
 
   random_num = real ( seed, kind = 8 ) * 4.656612875E-10
 
+
+
   return
 end
