@@ -579,8 +579,8 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
    INTEGER  :: phy_i,c
    AED_REAL :: flux, available
    INTEGER :: seed_growth = 123456789
-   AED_REAL :: mu = 1.5E+00
-   AED_REAL :: sigma = 0.5E+00
+   AED_REAL :: mu 
+   AED_REAL :: sigma 
    AED_REAL :: r4_normal_ab
    AED_REAL :: rng
 
@@ -717,7 +717,13 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
 
       ! METAL AND TOXIC EFFECTS
       fXl = 1.0
-
+      IF (phy_i==1) THEN
+         mu = 0.17E+00
+         sigma = 0.86E+00
+      ELSE 
+         mu= -0.81E+00
+         sigma= 1.37E+00
+      ENDIF
       rng=r4_normal_ab(mu,sigma,seed_growth)/secs_per_day 
       !------------------------------------------------------------------------+
       ! Primary production rate
