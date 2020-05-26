@@ -118,11 +118,6 @@ MODULE aed2_phytoplankton
    INTEGER :: diag_level = 10
    AED_REAL :: dtlim = 0.9 * 3600
    LOGICAL  :: extra_diag = .false.
-   INTEGER :: seed_growth = 123456789
-   AED_REAL :: mu = 0.0E+00
-   AED_REAL :: sigma = 1.0E+00
-   AED_REAL :: r4_normal_ab
-   AED_REAL :: rng
 
 !===============================================================================
 CONTAINS
@@ -154,8 +149,7 @@ SUBROUTINE aed2_phytoplankton_load_params(data, dbase, count, list, settling, re
     read(tfil,nml=phyto_data,iostat=status)
     close(tfil)
     IF (status /= 0) STOP 'Error reading namelist phyto_data'
-
-    rng=r4_normal_ab(mu,sigma,seed_growth)    
+   
 
     data%num_phytos = count
     ALLOCATE(data%phytos(count))
@@ -182,7 +176,7 @@ SUBROUTINE aed2_phytoplankton_load_params(data, dbase, count, list, settling, re
        data%phytos(i)%settling     = settling(i)
        data%phytos(i)%resuspension = resuspension(i)
        data%phytos(i)%Xcc          = pd(list(i))%Xcc
-       data%phytos(i)%R_growth     = rng*1/secs_per_day
+       data%phytos(i)%R_growth     = pd(list(i))%R_growth/secs_per_day
        data%phytos(i)%fT_Method    = pd(list(i))%fT_Method
        data%phytos(i)%theta_growth = pd(list(i))%theta_growth
        data%phytos(i)%T_std        = pd(list(i))%T_std
@@ -717,14 +711,22 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
 
       ! METAL AND TOXIC EFFECTS
       fXl = 1.0
+            
+
+      mu = 1.81E+00
+      sigma = 1.37E+00
+
       IF (phy_i==1) THEN
          mu = 0.17E+00
          sigma = 0.86E+00
-      ELSE 
-         mu= -0.81E+00
-         sigma= 1.37E+00
+      ELSE
+         mu = 1.81E+00
+         sigma = 1.37E+00
       ENDIF
+
       rng=r4_normal_ab(mu,sigma,seed_growth)/secs_per_day 
+      
+
       !------------------------------------------------------------------------+
       ! Primary production rate
       primprod(phy_i) = (rng) * fT * findMin(fI,fNit,fPho,fSil) * fxl
