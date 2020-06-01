@@ -713,19 +713,15 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
       fXl = 1.0
             
 
-      mu = 1.81E+00
-      sigma = 1.37E+00
-
       IF (phy_i==1) THEN
-         mu = 0.17E+00
-         sigma = 0.86E+00
+         mu = 1.0E+00
+         sigma = 0.1E+00
       ELSE
          mu = 1.81E+00
          sigma = 1.37E+00
       ENDIF
 
-      rng=r4_normal_ab(mu,sigma,seed_growth)/secs_per_day 
-      
+      rng=r4_normal_ab(mu,sigma,seed_growth)/secs_per_day
 
       !------------------------------------------------------------------------+
       ! Primary production rate
