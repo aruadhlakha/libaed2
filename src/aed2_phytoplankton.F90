@@ -176,7 +176,7 @@ SUBROUTINE aed2_phytoplankton_load_params(data, dbase, count, list, settling, re
        data%phytos(i)%settling     = settling(i)
        data%phytos(i)%resuspension = resuspension(i)
        data%phytos(i)%Xcc          = pd(list(i))%Xcc
-       data%phytos(i)%R_growth     = pd(list(i))%R_growth/secs_per_day
+       data%phytos(i)%R_growth     = 1000./secs_per_day
        data%phytos(i)%fT_Method    = pd(list(i))%fT_Method
        data%phytos(i)%theta_growth = pd(list(i))%theta_growth
        data%phytos(i)%T_std        = pd(list(i))%T_std
@@ -725,7 +725,7 @@ SUBROUTINE aed2_calculate_phytoplankton(data,column,layer_idx)
 
       !------------------------------------------------------------------------+
       ! Primary production rate
-      primprod(phy_i) = (1000./secs_per_day) * fT * findMin(fI,fNit,fPho,fSil) * fxl
+      primprod(phy_i) = data%phytos(phy_i)%R_growth * fT * findMin(fI,fNit,fPho,fSil) * fxl
 
       ! Adjust primary production rate for nitrogen fixers
       IF (data%phytos(phy_i)%simNFixation /= 0) THEN
